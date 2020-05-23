@@ -22,7 +22,7 @@ public class JwtTokenUtil implements Serializable {
   static final String CLAIM_KEY_USERNAME = "sub";
   static final String CLAIM_KEY_CREATED = "iat";
   private static final long serialVersionUID = -3301605591108950415L;
-  private Clock clock = DefaultClock.INSTANCE;
+  private final Clock clock = DefaultClock.INSTANCE;
 
   @Value("${jwt.secret}")
   private String secret;
@@ -70,8 +70,13 @@ public class JwtTokenUtil implements Serializable {
     final Date createdDate = clock.now();
     final Date expirationDate = calculateExpirationDate(createdDate);
 
-    return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(createdDate)
-        .setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, secret).compact();
+    return Jwts.builder()
+        .setClaims(claims)
+        .setSubject(subject)
+        .setIssuedAt(createdDate)
+        .setExpiration(expirationDate)
+        .signWith(SignatureAlgorithm.HS512, secret)
+        .compact();
   }
 
   public Boolean canTokenBeRefreshed(String token) {
@@ -99,4 +104,3 @@ public class JwtTokenUtil implements Serializable {
     return new Date(createdDate.getTime() + expiration * 1000);
   }
 }
-

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,39 +17,41 @@ import com.rohit26.BookDetails.jwt.resource.JwtInMemoryUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  JwtInMemoryUserDetailsService userDetailsService;
-  
-  @Autowired 
-  private JwtTokenAuthorizationRequestFilter jwtFilter;
-  
+  @Autowired JwtInMemoryUserDetailsService userDetailsService;
+
+  @Autowired private JwtTokenAuthorizationRequestFilter jwtFilter;
+
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userDetailsService);
   }
-  
-  
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable()
-    .authorizeRequests()
-    .antMatchers("/authenticate").permitAll()
-    .anyRequest().authenticated()
-    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    
-     http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    http.csrf()
+        .disable()
+        .authorizeRequests()
+        .antMatchers("/authenticate")
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+    http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
   }
 
-
-  @Bean 
+  @Bean
   public PasswordEncoder noPasswordEncoder() {
     return NoOpPasswordEncoder.getInstance();
   }
-  
+
   @Bean
-  public AuthenticationManager authenticationManagerBean() throws Exception{
-   return super.authenticationManager();
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManager();
   }
 }

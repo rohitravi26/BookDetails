@@ -6,8 +6,8 @@ import com.rohit26.BookDetails.exception.NotFoundException;
 
 public interface BookService {
   
-  public Book getBook(int id)   ;
-  public ResponseEntity<Book> addBook(Book book);
-  public ResponseEntity<Book> updateBook(Book book)  ;
+  Book getBook(int id)   ;
+  ResponseEntity<Book> addBook(Book book);
+  ResponseEntity<Book> updateBook(Book book)  ;
   
 }

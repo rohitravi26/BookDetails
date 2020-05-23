@@ -32,7 +32,7 @@ public class JwtTokenAuthorizationRequestFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
     
    
-    private String tokenHeader = "Authorization";
+    private final String tokenHeader = "Authorization";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {

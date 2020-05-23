@@ -26,7 +26,7 @@ import com.rohit26.BookDetails.jwt.resource.AuthenticationResponse;
 @RestController
 public class JwtAuthenticationController {
 
-  private String tokenHeader = "Authorization";
+  private final String tokenHeader = "Authorization";
 
   @Autowired
   private AuthenticationManager authenticationManager;
